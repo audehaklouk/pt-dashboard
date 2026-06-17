@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: pt-dashboard
+    runtime: python
+    plan: starter
+    buildCommand: |
+      pip install -r requirements.txt &&
+      cd frontend && npm ci && npm run build
+    startCommand: uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DB_PATH
+        value: /var/data/dashboard.db
+      - key: PYTHON_VERSION
+        value: "3.11"
+    disk:
+      name: pt-data
+      mountPath: /var/data
+      sizeGB: 1

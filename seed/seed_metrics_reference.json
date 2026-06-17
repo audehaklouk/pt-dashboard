@@ -1,0 +1,978 @@
+{
+ "funnel": {
+  "National-KSA": {
+   "threads": 14319,
+   "inbound": 10498,
+   "twoway": 6811,
+   "reached_price": 3748,
+   "paylink": 544,
+   "booked": 233,
+   "inb_pct": 73.3,
+   "tw_pct_inb": 64.9,
+   "price_pct_tw": 55.0,
+   "pl_pct_tw": 8.0,
+   "bk_pct_tw": 3.4
+  },
+  "National-Qatar": {
+   "threads": 8074,
+   "inbound": 5277,
+   "twoway": 3600,
+   "reached_price": 1979,
+   "paylink": 677,
+   "booked": 224,
+   "inb_pct": 65.4,
+   "tw_pct_inb": 68.2,
+   "price_pct_tw": 55.0,
+   "pl_pct_tw": 18.8,
+   "bk_pct_tw": 6.2
+  },
+  "Apex-Qatar": {
+   "threads": 1343,
+   "inbound": 1198,
+   "twoway": 628,
+   "reached_price": 105,
+   "paylink": 13,
+   "booked": 22,
+   "inb_pct": 89.2,
+   "tw_pct_inb": 52.4,
+   "price_pct_tw": 16.7,
+   "pl_pct_tw": 2.1,
+   "bk_pct_tw": 3.5
+  },
+  "Apex-KSA": {
+   "threads": 3192,
+   "inbound": 3121,
+   "twoway": 1072,
+   "reached_price": 98,
+   "paylink": 8,
+   "booked": 4,
+   "inb_pct": 97.8,
+   "tw_pct_inb": 34.3,
+   "price_pct_tw": 9.1,
+   "pl_pct_tw": 0.7,
+   "bk_pct_tw": 0.4
+  },
+  "Apex-UAE": {
+   "threads": 478,
+   "inbound": 456,
+   "twoway": 180,
+   "reached_price": 37,
+   "paylink": 4,
+   "booked": 3,
+   "inb_pct": 95.4,
+   "tw_pct_inb": 39.5,
+   "price_pct_tw": 20.6,
+   "pl_pct_tw": 2.2,
+   "bk_pct_tw": 1.7
+  },
+  "Apex-Bahrain": {
+   "threads": 258,
+   "inbound": 258,
+   "twoway": 88,
+   "reached_price": 18,
+   "paylink": 2,
+   "booked": 1,
+   "inb_pct": 100.0,
+   "tw_pct_inb": 34.1,
+   "price_pct_tw": 20.5,
+   "pl_pct_tw": 2.3,
+   "bk_pct_tw": 1.1
+  },
+  "Apex-Jordan": {
+   "threads": 217,
+   "inbound": 205,
+   "twoway": 90,
+   "reached_price": 31,
+   "paylink": 2,
+   "booked": 1,
+   "inb_pct": 94.5,
+   "tw_pct_inb": 43.9,
+   "price_pct_tw": 34.4,
+   "pl_pct_tw": 2.2,
+   "bk_pct_tw": 1.1
+  },
+  "National (KSA+Qatar)": {
+   "threads": 22393,
+   "inbound": 15775,
+   "twoway": 10411,
+   "reached_price": 5727,
+   "paylink": 1221,
+   "booked": 457,
+   "inb_pct": 70.4,
+   "tw_pct_inb": 66.0,
+   "price_pct_tw": 55.0,
+   "pl_pct_tw": 11.7,
+   "bk_pct_tw": 4.4
+  },
+  "Apex (all)": {
+   "threads": 5488,
+   "inbound": 5238,
+   "twoway": 2058,
+   "reached_price": 289,
+   "paylink": 29,
+   "booked": 31,
+   "inb_pct": 95.4,
+   "tw_pct_inb": 39.3,
+   "price_pct_tw": 14.0,
+   "pl_pct_tw": 1.4,
+   "bk_pct_tw": 1.5
+  },
+  "ALL": {
+   "threads": 27881,
+   "inbound": 21013,
+   "twoway": 12469,
+   "reached_price": 6016,
+   "paylink": 1250,
+   "booked": 488,
+   "inb_pct": 75.4,
+   "tw_pct_inb": 59.3,
+   "price_pct_tw": 48.2,
+   "pl_pct_tw": 10.0,
+   "bk_pct_tw": 3.9
+  }
+ },
+ "payment": {
+  "National-KSA": {
+   "paylinks": 546,
+   "dark": 68,
+   "dark_pct": 12.5,
+   "continued": 478,
+   "cont_pct": 87.5,
+   "booked_pct": 25.3
+  },
+  "National-Qatar": {
+   "paylinks": 679,
+   "dark": 39,
+   "dark_pct": 5.7,
+   "continued": 640,
+   "cont_pct": 94.3,
+   "booked_pct": 30.6
+  },
+  "Apex-Qatar": {
+   "paylinks": 13,
+   "dark": 0,
+   "dark_pct": 0.0,
+   "continued": 13,
+   "cont_pct": 100.0,
+   "booked_pct": 23.1
+  },
+  "Apex-KSA": {
+   "paylinks": 8,
+   "dark": 0,
+   "dark_pct": 0.0,
+   "continued": 8,
+   "cont_pct": 100.0,
+   "booked_pct": 0.0
+  },
+  "Apex-UAE": {
+   "paylinks": 4,
+   "dark": 0,
+   "dark_pct": 0.0,
+   "continued": 4,
+   "cont_pct": 100.0,
+   "booked_pct": 50.0
+  },
+  "Apex-Bahrain": {
+   "paylinks": 2,
+   "dark": 1,
+   "dark_pct": 50.0,
+   "continued": 1,
+   "cont_pct": 50.0,
+   "booked_pct": 0.0
+  },
+  "Apex-Jordan": {
+   "paylinks": 2,
+   "dark": 1,
+   "dark_pct": 50.0,
+   "continued": 1,
+   "cont_pct": 50.0,
+   "booked_pct": 0.0
+  },
+  "National (KSA+Qatar)": {
+   "paylinks": 1225,
+   "dark": 107,
+   "dark_pct": 8.7,
+   "continued": 1118,
+   "cont_pct": 91.3,
+   "booked_pct": 28.2
+  },
+  "Apex (all)": {
+   "paylinks": 29,
+   "dark": 2,
+   "dark_pct": 6.9,
+   "continued": 27,
+   "cont_pct": 93.1,
+   "booked_pct": 17.2
+  }
+ },
+ "dropafter": {
+  "National-KSA": {
+   "after_pricequote": {
+    "n": 3586,
+    "dark": 1387,
+    "pct": 38.7
+   },
+   "after_paylink": {
+    "n": 546,
+    "dark": 68,
+    "pct": 12.5
+   },
+   "after_askparent": {
+    "n": 5,
+    "dark": 1,
+    "pct": 20.0
+   },
+   "after_agentsched": {
+    "n": 3387,
+    "dark": 984,
+    "pct": 29.1
+   }
+  },
+  "National-Qatar": {
+   "after_pricequote": {
+    "n": 1828,
+    "dark": 603,
+    "pct": 33.0
+   },
+   "after_paylink": {
+    "n": 679,
+    "dark": 39,
+    "pct": 5.7
+   },
+   "after_askparent": {
+    "n": 7,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_agentsched": {
+    "n": 1743,
+    "dark": 581,
+    "pct": 33.3
+   }
+  },
+  "Apex-Qatar": {
+   "after_pricequote": {
+    "n": 92,
+    "dark": 20,
+    "pct": 21.7
+   },
+   "after_paylink": {
+    "n": 13,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_askparent": {
+    "n": 3,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_agentsched": {
+    "n": 334,
+    "dark": 92,
+    "pct": 27.5
+   }
+  },
+  "Apex-KSA": {
+   "after_pricequote": {
+    "n": 87,
+    "dark": 42,
+    "pct": 48.3
+   },
+   "after_paylink": {
+    "n": 8,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_askparent": {
+    "n": 0,
+    "dark": 0,
+    "pct": null
+   },
+   "after_agentsched": {
+    "n": 362,
+    "dark": 250,
+    "pct": 69.1
+   }
+  },
+  "Apex-UAE": {
+   "after_pricequote": {
+    "n": 39,
+    "dark": 19,
+    "pct": 48.7
+   },
+   "after_paylink": {
+    "n": 4,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_askparent": {
+    "n": 0,
+    "dark": 0,
+    "pct": null
+   },
+   "after_agentsched": {
+    "n": 64,
+    "dark": 43,
+    "pct": 67.2
+   }
+  },
+  "Apex-Bahrain": {
+   "after_pricequote": {
+    "n": 15,
+    "dark": 5,
+    "pct": 33.3
+   },
+   "after_paylink": {
+    "n": 2,
+    "dark": 1,
+    "pct": 50.0
+   },
+   "after_askparent": {
+    "n": 0,
+    "dark": 0,
+    "pct": null
+   },
+   "after_agentsched": {
+    "n": 12,
+    "dark": 6,
+    "pct": 50.0
+   }
+  },
+  "Apex-Jordan": {
+   "after_pricequote": {
+    "n": 25,
+    "dark": 11,
+    "pct": 44.0
+   },
+   "after_paylink": {
+    "n": 2,
+    "dark": 1,
+    "pct": 50.0
+   },
+   "after_askparent": {
+    "n": 0,
+    "dark": 0,
+    "pct": null
+   },
+   "after_agentsched": {
+    "n": 25,
+    "dark": 10,
+    "pct": 40.0
+   }
+  },
+  "National (KSA+Qatar)": {
+   "after_pricequote": {
+    "n": 5414,
+    "dark": 1990,
+    "pct": 36.8
+   },
+   "after_paylink": {
+    "n": 1225,
+    "dark": 107,
+    "pct": 8.7
+   },
+   "after_askparent": {
+    "n": 12,
+    "dark": 1,
+    "pct": 8.3
+   },
+   "after_agentsched": {
+    "n": 5130,
+    "dark": 1565,
+    "pct": 30.5
+   }
+  },
+  "Apex (all)": {
+   "after_pricequote": {
+    "n": 258,
+    "dark": 97,
+    "pct": 37.6
+   },
+   "after_paylink": {
+    "n": 29,
+    "dark": 2,
+    "pct": 6.9
+   },
+   "after_askparent": {
+    "n": 3,
+    "dark": 0,
+    "pct": 0.0
+   },
+   "after_agentsched": {
+    "n": 797,
+    "dark": 401,
+    "pct": 50.3
+   }
+  }
+ },
+ "lastmsg": {
+  "National-KSA": {
+   "engaged": 6811,
+   "last_agent": 4308,
+   "last_agent_pct": 63.3,
+   "last_cust": 1012,
+   "last_cust_pct": 14.9
+  },
+  "National-Qatar": {
+   "engaged": 3600,
+   "last_agent": 2225,
+   "last_agent_pct": 61.8,
+   "last_cust": 527,
+   "last_cust_pct": 14.6
+  },
+  "Apex-Qatar": {
+   "engaged": 628,
+   "last_agent": 365,
+   "last_agent_pct": 58.1,
+   "last_cust": 116,
+   "last_cust_pct": 18.5
+  },
+  "Apex-KSA": {
+   "engaged": 1072,
+   "last_agent": 681,
+   "last_agent_pct": 63.5,
+   "last_cust": 373,
+   "last_cust_pct": 34.8
+  },
+  "Apex-UAE": {
+   "engaged": 180,
+   "last_agent": 103,
+   "last_agent_pct": 57.2,
+   "last_cust": 77,
+   "last_cust_pct": 42.8
+  },
+  "Apex-Bahrain": {
+   "engaged": 88,
+   "last_agent": 58,
+   "last_agent_pct": 65.9,
+   "last_cust": 30,
+   "last_cust_pct": 34.1
+  },
+  "Apex-Jordan": {
+   "engaged": 90,
+   "last_agent": 72,
+   "last_agent_pct": 80.0,
+   "last_cust": 18,
+   "last_cust_pct": 20.0
+  }
+ },
+ "objections": {
+  "denominators": {
+   "National-KSA": 6811,
+   "National-Qatar": 3600,
+   "Apex-Qatar": 628,
+   "Apex-KSA": 1072,
+   "Apex-UAE": 180,
+   "Apex-Bahrain": 88,
+   "Apex-Jordan": 90,
+   "National (KSA+Qatar)": 10411,
+   "Apex (all)": 2058
+  },
+  "rows": [
+   {
+    "key": "obj_price",
+    "label": "Price too high (says expensive)",
+    "National-KSA": 215,
+    "National-Qatar": 75,
+    "Apex-Qatar": 10,
+    "Apex-KSA": 3,
+    "Apex-UAE": 1,
+    "Apex-Bahrain": 1,
+    "Apex-Jordan": 0,
+    "National": 290,
+    "Apex": 15,
+    "Nat_pct": 2.8,
+    "Apex_pct": 0.7
+   },
+   {
+    "key": "ask_discount",
+    "label": "Asks for a discount/offer",
+    "National-KSA": 214,
+    "National-Qatar": 213,
+    "Apex-Qatar": 3,
+    "Apex-KSA": 4,
+    "Apex-UAE": 3,
+    "Apex-Bahrain": 2,
+    "Apex-Jordan": 4,
+    "National": 427,
+    "Apex": 16,
+    "Nat_pct": 4.1,
+    "Apex_pct": 0.8
+   },
+   {
+    "key": "trial_req",
+    "label": "Wants a trial / free demo first",
+    "National-KSA": 302,
+    "National-Qatar": 290,
+    "Apex-Qatar": 20,
+    "Apex-KSA": 46,
+    "Apex-UAE": 15,
+    "Apex-Bahrain": 10,
+    "Apex-Jordan": 5,
+    "National": 592,
+    "Apex": 96,
+    "Nat_pct": 5.7,
+    "Apex_pct": 4.7
+   },
+   {
+    "key": "obj_busy",
+    "label": "Too busy / no time right now",
+    "National-KSA": 111,
+    "National-Qatar": 150,
+    "Apex-Qatar": 29,
+    "Apex-KSA": 0,
+    "Apex-UAE": 1,
+    "Apex-Bahrain": 1,
+    "Apex-Jordan": 1,
+    "National": 261,
+    "Apex": 32,
+    "Nat_pct": 2.5,
+    "Apex_pct": 1.6
+   },
+   {
+    "key": "obj_online",
+    "label": "Online vs in-person / where are you",
+    "National-KSA": 192,
+    "National-Qatar": 201,
+    "Apex-Qatar": 4,
+    "Apex-KSA": 3,
+    "Apex-UAE": 1,
+    "Apex-Bahrain": 1,
+    "Apex-Jordan": 2,
+    "National": 393,
+    "Apex": 11,
+    "Nat_pct": 3.8,
+    "Apex_pct": 0.5
+   },
+   {
+    "key": "obj_think",
+    "label": "Wants to think / will get back",
+    "National-KSA": 54,
+    "National-Qatar": 42,
+    "Apex-Qatar": 12,
+    "Apex-KSA": 3,
+    "Apex-UAE": 0,
+    "Apex-Bahrain": 1,
+    "Apex-Jordan": 3,
+    "National": 96,
+    "Apex": 19,
+    "Nat_pct": 0.9,
+    "Apex_pct": 0.9
+   },
+   {
+    "key": "tutor_qual",
+    "label": "Tutor quality / qualification",
+    "National-KSA": 25,
+    "National-Qatar": 12,
+    "Apex-Qatar": 1,
+    "Apex-KSA": 4,
+    "Apex-UAE": 3,
+    "Apex-Bahrain": 0,
+    "Apex-Jordan": 1,
+    "National": 37,
+    "Apex": 9,
+    "Nat_pct": 0.4,
+    "Apex_pct": 0.4
+   }
+  ]
+ },
+ "capabilities": [
+  {
+   "key": "cap_resched",
+   "label": "Reschedule / move a lesson",
+   "National-KSA": 152,
+   "National-Qatar": 174,
+   "Apex-Qatar": 97,
+   "Apex-KSA": 13,
+   "Apex-UAE": 1,
+   "Apex-Bahrain": 0,
+   "Apex-Jordan": 0,
+   "TOTAL": 437
+  },
+  {
+   "key": "cap_rec",
+   "label": "Get lesson recording",
+   "National-KSA": 225,
+   "National-Qatar": 86,
+   "Apex-Qatar": 16,
+   "Apex-KSA": 3,
+   "Apex-UAE": 0,
+   "Apex-Bahrain": 0,
+   "Apex-Jordan": 1,
+   "TOTAL": 331
+  },
+  {
+   "key": "cap_prog",
+   "label": "Progress / report / feedback",
+   "National-KSA": 27,
+   "National-Qatar": 44,
+   "Apex-Qatar": 14,
+   "Apex-KSA": 0,
+   "Apex-UAE": 2,
+   "Apex-Bahrain": 0,
+   "Apex-Jordan": 0,
+   "TOTAL": 87
+  },
+  {
+   "key": "cap_avail",
+   "label": "See tutor availability/slots",
+   "National-KSA": 36,
+   "National-Qatar": 28,
+   "Apex-Qatar": 11,
+   "Apex-KSA": 2,
+   "Apex-UAE": 0,
+   "Apex-Bahrain": 0,
+   "Apex-Jordan": 0,
+   "TOTAL": 77
+  },
+  {
+   "key": "cap_cancel",
+   "label": "Cancel / refund",
+   "National-KSA": 14,
+   "National-Qatar": 9,
+   "Apex-Qatar": 6,
+   "Apex-KSA": 0,
+   "Apex-UAE": 0,
+   "Apex-Bahrain": 0,
+   "Apex-Jordan": 0,
+   "TOTAL": 29
+  }
+ ],
+ "correlates": {
+  "National (KSA+Qatar)": {
+   "booked": 457,
+   "notbooked": 9954,
+   "rows": [
+    {
+     "key": "trial_req",
+     "label": "Customer asked for trial/demo",
+     "booked_pct": 26.7,
+     "notbooked_pct": 4.7,
+     "lift": 5.7
+    },
+    {
+     "key": "ask_discount",
+     "label": "Customer asked for discount",
+     "booked_pct": 20.8,
+     "notbooked_pct": 3.3,
+     "lift": 6.3
+    },
+    {
+     "key": "agentsched_sent",
+     "label": "Agent proposed a schedule",
+     "booked_pct": 95.0,
+     "notbooked_pct": 46.1,
+     "lift": 2.1
+    },
+    {
+     "key": "pricequote_sent",
+     "label": "Agent quoted a price",
+     "booked_pct": 89.7,
+     "notbooked_pct": 49.2,
+     "lift": 1.8
+    },
+    {
+     "key": "paylink_sent",
+     "label": "Agent sent payment link",
+     "booked_pct": 75.7,
+     "notbooked_pct": 8.8,
+     "lift": 8.6
+    },
+    {
+     "key": "cap_prog",
+     "label": "Customer asked progress/report",
+     "booked_pct": 7.0,
+     "notbooked_pct": 0.4,
+     "lift": 17.5
+    },
+    {
+     "key": "obj_price",
+     "label": "Customer said too expensive",
+     "booked_pct": 7.4,
+     "notbooked_pct": 2.6,
+     "lift": 2.8
+    }
+   ]
+  },
+  "Apex (all)": {
+   "booked": 31,
+   "notbooked": 2027,
+   "rows": [
+    {
+     "key": "trial_req",
+     "label": "Customer asked for trial/demo",
+     "booked_pct": 29.0,
+     "notbooked_pct": 4.3,
+     "lift": 6.7
+    },
+    {
+     "key": "ask_discount",
+     "label": "Customer asked for discount",
+     "booked_pct": 6.5,
+     "notbooked_pct": 0.7,
+     "lift": 9.3
+    },
+    {
+     "key": "agentsched_sent",
+     "label": "Agent proposed a schedule",
+     "booked_pct": 87.1,
+     "notbooked_pct": 24.9,
+     "lift": 3.5
+    },
+    {
+     "key": "pricequote_sent",
+     "label": "Agent quoted a price",
+     "booked_pct": 41.9,
+     "notbooked_pct": 11.0,
+     "lift": 3.8
+    },
+    {
+     "key": "paylink_sent",
+     "label": "Agent sent payment link",
+     "booked_pct": 16.1,
+     "notbooked_pct": 1.2,
+     "lift": 13.4
+    },
+    {
+     "key": "cap_prog",
+     "label": "Customer asked progress/report",
+     "booked_pct": 3.2,
+     "notbooked_pct": 0.7,
+     "lift": 4.6
+    },
+    {
+     "key": "obj_price",
+     "label": "Customer said too expensive",
+     "booked_pct": 9.7,
+     "notbooked_pct": 0.6,
+     "lift": 16.2
+    }
+   ]
+  }
+ },
+ "parentstudent": {
+  "National-KSA": {
+   "n": 6811,
+   "parent": 515,
+   "parent_pct": 7.6,
+   "student": 78,
+   "student_pct": 1.1,
+   "unknown": 6195
+  },
+  "National-Qatar": {
+   "n": 3600,
+   "parent": 523,
+   "parent_pct": 14.5,
+   "student": 94,
+   "student_pct": 2.6,
+   "unknown": 2950
+  },
+  "Apex-Qatar": {
+   "n": 628,
+   "parent": 62,
+   "parent_pct": 9.9,
+   "student": 34,
+   "student_pct": 5.4,
+   "unknown": 528
+  },
+  "Apex-KSA": {
+   "n": 1072,
+   "parent": 13,
+   "parent_pct": 1.2,
+   "student": 4,
+   "student_pct": 0.4,
+   "unknown": 1055
+  },
+  "Apex-UAE": {
+   "n": 180,
+   "parent": 8,
+   "parent_pct": 4.4,
+   "student": 1,
+   "student_pct": 0.6,
+   "unknown": 171
+  },
+  "Apex-Bahrain": {
+   "n": 88,
+   "parent": 4,
+   "parent_pct": 4.5,
+   "student": 0,
+   "student_pct": 0.0,
+   "unknown": 84
+  },
+  "Apex-Jordan": {
+   "n": 90,
+   "parent": 6,
+   "parent_pct": 6.7,
+   "student": 1,
+   "student_pct": 1.1,
+   "unknown": 83
+  }
+ },
+ "entry_tpl": {
+  "National-KSA": {
+   "inbound": 10498,
+   "tpl": 0,
+   "pct": 0.0
+  },
+  "National-Qatar": {
+   "inbound": 5277,
+   "tpl": 1,
+   "pct": 0.0
+  },
+  "Apex-Qatar": {
+   "inbound": 1198,
+   "tpl": 116,
+   "pct": 9.7
+  },
+  "Apex-KSA": {
+   "inbound": 3121,
+   "tpl": 2068,
+   "pct": 66.3
+  },
+  "Apex-UAE": {
+   "inbound": 456,
+   "tpl": 176,
+   "pct": 38.6
+  },
+  "Apex-Bahrain": {
+   "inbound": 258,
+   "tpl": 146,
+   "pct": 56.6
+  },
+  "Apex-Jordan": {
+   "inbound": 205,
+   "tpl": 0,
+   "pct": 0.0
+  }
+ },
+ "automation": {
+  "National-KSA": {
+   "manual_paylink_threads": 546,
+   "broadcast_msgs": 11512,
+   "workflow_msgs": 10180
+  },
+  "National-Qatar": {
+   "manual_paylink_threads": 679,
+   "broadcast_msgs": 7157,
+   "workflow_msgs": 6512
+  },
+  "Apex-Qatar": {
+   "manual_paylink_threads": 13,
+   "broadcast_msgs": 1550,
+   "workflow_msgs": 8254
+  },
+  "Apex-KSA": {
+   "manual_paylink_threads": 8,
+   "broadcast_msgs": 393,
+   "workflow_msgs": 850
+  },
+  "Apex-UAE": {
+   "manual_paylink_threads": 4,
+   "broadcast_msgs": 0,
+   "workflow_msgs": 2
+  },
+  "Apex-Bahrain": {
+   "manual_paylink_threads": 2,
+   "broadcast_msgs": 0,
+   "workflow_msgs": 0
+  },
+  "Apex-Jordan": {
+   "manual_paylink_threads": 2,
+   "broadcast_msgs": 0,
+   "workflow_msgs": 0
+  }
+ },
+ "response": {
+  "National-KSA": {
+   "n_first": 9741,
+   "first_median_min": 14.2,
+   "first_p90_min": 502.3,
+   "permsg_median_min": 2.0,
+   "permsg_p90_min": 114.0,
+   "noreply": 757,
+   "inbound": 10498,
+   "noreply_pct": 7.2,
+   "q_total": 7926,
+   "q_unanswered_24h": 85,
+   "q_unanswered_pct": 1.1
+  },
+  "National-Qatar": {
+   "n_first": 4958,
+   "first_median_min": 3.2,
+   "first_p90_min": 183.4,
+   "permsg_median_min": 1.5,
+   "permsg_p90_min": 26.9,
+   "noreply": 319,
+   "inbound": 5277,
+   "noreply_pct": 6.0,
+   "q_total": 6164,
+   "q_unanswered_24h": 45,
+   "q_unanswered_pct": 0.7
+  },
+  "Apex-Qatar": {
+   "n_first": 1131,
+   "first_median_min": 39.6,
+   "first_p90_min": 698.5,
+   "permsg_median_min": 3.2,
+   "permsg_p90_min": 62.4,
+   "noreply": 67,
+   "inbound": 1198,
+   "noreply_pct": 5.6,
+   "q_total": 972,
+   "q_unanswered_24h": 5,
+   "q_unanswered_pct": 0.5
+  },
+  "Apex-KSA": {
+   "n_first": 2873,
+   "first_median_min": 76.5,
+   "first_p90_min": 666.3,
+   "permsg_median_min": 19.2,
+   "permsg_p90_min": 586.9,
+   "noreply": 248,
+   "inbound": 3121,
+   "noreply_pct": 7.9,
+   "q_total": 185,
+   "q_unanswered_24h": 16,
+   "q_unanswered_pct": 8.6
+  },
+  "Apex-UAE": {
+   "n_first": 422,
+   "first_median_min": 26.8,
+   "first_p90_min": 541.9,
+   "permsg_median_min": 8.5,
+   "permsg_p90_min": 292.8,
+   "noreply": 34,
+   "inbound": 456,
+   "noreply_pct": 7.5,
+   "q_total": 50,
+   "q_unanswered_24h": 2,
+   "q_unanswered_pct": 4.0
+  },
+  "Apex-Bahrain": {
+   "n_first": 236,
+   "first_median_min": 80.7,
+   "first_p90_min": 618.6,
+   "permsg_median_min": 30.4,
+   "permsg_p90_min": 470.3,
+   "noreply": 22,
+   "inbound": 258,
+   "noreply_pct": 8.5,
+   "q_total": 18,
+   "q_unanswered_24h": 2,
+   "q_unanswered_pct": 11.1
+  },
+  "Apex-Jordan": {
+   "n_first": 176,
+   "first_median_min": 38.8,
+   "first_p90_min": 660.1,
+   "permsg_median_min": 7.3,
+   "permsg_p90_min": 409.8,
+   "noreply": 29,
+   "inbound": 205,
+   "noreply_pct": 14.1,
+   "q_total": 53,
+   "q_unanswered_24h": 10,
+   "q_unanswered_pct": 18.9
+  }
+ }
+}
