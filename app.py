@@ -1,14 +1,17 @@
 """FastAPI application for PT Conversation Dashboard."""
 import csv
+import hashlib
+import hmac
 import os
+import secrets
 import shutil
 import sys
 import tempfile
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, Form, HTTPException, Query, UploadFile
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi import Cookie, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -20,6 +23,62 @@ from db import get_db, get_filter_options, init_db, insert_threads, query_thread
 from metrics import compute_metrics
 
 app = FastAPI(title="PT Conversation Dashboard")
+
+# --- Simple password gate ---
+SITE_PASSWORD = os.environ.get("SITE_PASSWORD", "letsdeploymorethingstoprod2026")
+# Token is a HMAC of the password so it changes if the password changes
+_TOKEN = hmac.new(SITE_PASSWORD.encode(), b"pt-dashboard-auth", hashlib.sha256).hexdigest()
+
+LOGIN_HTML = """<!doctype html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PT Dashboard — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#F4F7FC;display:flex;
+  align-items:center;justify-content:center;min-height:100vh}
+.card{background:#fff;border-radius:16px;box-shadow:0 1px 3px rgba(16,24,40,.06),
+  0 1px 2px rgba(16,24,40,.04);padding:2.5rem;width:100%;max-width:380px}
+h1{font-size:1.25rem;font-weight:700;color:#0F1B3D;margin-bottom:.25rem}
+p{font-size:.8rem;color:#5B6B8C;margin-bottom:1.5rem}
+input{width:100%;padding:.65rem .85rem;border:1px solid #E6ECF5;border-radius:10px;
+  font-size:.9rem;color:#0F1B3D;outline:none;transition:border .15s}
+input:focus{border-color:#2D5BFF;box-shadow:0 0 0 3px rgba(45,91,255,.15)}
+button{width:100%;margin-top:1rem;padding:.7rem;border:none;border-radius:10px;
+  background:#2D5BFF;color:#fff;font-weight:600;font-size:.9rem;cursor:pointer;
+  transition:background .15s}
+button:hover{background:#1E40C8}
+.err{color:#EF4444;font-size:.8rem;margin-top:.75rem}
+</style></head><body>
+<form class="card" method="POST" action="/login">
+<h1>PT Conversation Dashboard</h1>
+<p>Enter the password to continue.</p>
+<input name="password" type="password" placeholder="Password" autofocus required>
+<button type="submit">Enter</button>
+__ERR__
+</form></body></html>"""
+
+
+def _is_authed(auth_token: str | None) -> bool:
+    if not auth_token:
+        return False
+    return hmac.compare_digest(auth_token, _TOKEN)
+
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page():
+    return LOGIN_HTML.replace("__ERR__", "")
+
+
+@app.post("/login")
+def login_submit(request: Request, password: str = Form(...)):
+    if password == SITE_PASSWORD:
+        resp = RedirectResponse(url="/", status_code=303)
+        resp.set_cookie("auth_token", _TOKEN, httponly=True, max_age=60 * 60 * 24 * 30, samesite="lax")
+        return resp
+    html = LOGIN_HTML.replace("__ERR__", '<div class="err">Wrong password.</div>')
+    return HTMLResponse(html, status_code=401)
 
 
 @app.on_event("startup")
@@ -34,7 +93,9 @@ def health():
 
 
 @app.get("/api/filters")
-def filters():
+def filters(auth_token: str | None = Cookie(None)):
+    if not _is_authed(auth_token):
+        raise HTTPException(401, "Unauthorized")
     db = get_db()
     try:
         data = get_filter_options(db)
@@ -50,7 +111,10 @@ def threads(
     workspace: Optional[str] = Query(None),  # comma-separated
     date_from: Optional[str] = Query(None),
     date_to: Optional[str] = Query(None),
+    auth_token: str | None = Cookie(None),
 ):
+    if not _is_authed(auth_token):
+        raise HTTPException(401, "Unauthorized")
     db = get_db()
     try:
         countries = (
@@ -79,7 +143,10 @@ async def import_csv(
     workspace: str = Form(...),
     brand: str = Form(...),
     country: str = Form(...),
+    auth_token: str | None = Cookie(None),
 ):
+    if not _is_authed(auth_token):
+        raise HTTPException(401, "Unauthorized")
     # Validate brand
     if brand not in ("National", "Apex"):
         raise HTTPException(400, "Brand must be 'National' or 'Apex'")
@@ -229,7 +296,13 @@ if FRONTEND_DIR.exists():
     )
 
     @app.get("/{full_path:path}")
-    async def serve_frontend(full_path: str):
+    async def serve_frontend(full_path: str, auth_token: str | None = Cookie(None)):
+        # Allow login page without auth
+        if full_path == "login":
+            return LOGIN_HTML.replace("__ERR__", "")
+        # Check auth
+        if not _is_authed(auth_token):
+            return RedirectResponse(url="/login", status_code=303)
         # Try serving the exact file first
         file_path = FRONTEND_DIR / full_path
         if file_path.is_file():
