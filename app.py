@@ -84,10 +84,27 @@ def login_submit(request: Request, password: str = Form(...)):
     return HTMLResponse(html, status_code=401)
 
 
+import asyncio
+import httpx
+
+async def _keep_alive():
+    """Ping ourselves every 4 minutes to prevent free-tier spin-down."""
+    url = os.environ.get("RENDER_EXTERNAL_URL", "")
+    if not url:
+        return
+    async with httpx.AsyncClient() as client:
+        while True:
+            await asyncio.sleep(240)
+            try:
+                await client.get(f"{url}/api/health", timeout=10)
+            except Exception:
+                pass
+
 @app.on_event("startup")
 def startup():
     init_db()
     seed_db()
+    asyncio.get_event_loop().create_task(_keep_alive())
 
 
 @app.get("/api/health")
