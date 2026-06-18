@@ -7,6 +7,10 @@ import tempfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
+# Auth cookie for test requests
+from app import _TOKEN
+_AUTH_COOKIES = {"auth_token": _TOKEN}
+
 
 def test_import_header_validation():
     """Test that import rejects files with wrong headers."""
@@ -25,7 +29,8 @@ def test_import_header_validation():
         with open(tmp.name, 'rb') as f:
             response = client.post('/api/import',
                 files={'file': ('test.csv', f, 'text/csv')},
-                data={'workspace': 'Test', 'brand': 'National', 'country': 'KSA'})
+                data={'workspace': 'Test', 'brand': 'National', 'country': 'KSA'},
+                cookies=_AUTH_COOKIES)
         assert response.status_code == 400
     finally:
         os.unlink(tmp.name)
@@ -56,7 +61,8 @@ def test_import_brand_validation():
         with open(tmp.name, 'rb') as f:
             response = client.post('/api/import',
                 files={'file': ('test.csv', f, 'text/csv')},
-                data={'workspace': 'Test', 'brand': 'InvalidBrand', 'country': 'KSA'})
+                data={'workspace': 'Test', 'brand': 'InvalidBrand', 'country': 'KSA'},
+                cookies=_AUTH_COOKIES)
         assert response.status_code == 400
     finally:
         os.unlink(tmp.name)
@@ -79,7 +85,7 @@ def test_filters_endpoint():
     from app import app
 
     client = TestClient(app)
-    response = client.get('/api/filters')
+    response = client.get('/api/filters', cookies=_AUTH_COOKIES)
     assert response.status_code == 200
     data = response.json()['data']
     assert 'workspaces' in data
@@ -93,7 +99,7 @@ def test_threads_endpoint():
     from app import app
 
     client = TestClient(app)
-    response = client.get('/api/threads')
+    response = client.get('/api/threads', cookies=_AUTH_COOKIES)
     assert response.status_code == 200
     data = response.json()['data']
     assert data['funnel']['threads'] == 27881

@@ -1,4 +1,6 @@
 """FastAPI application for PT Conversation Dashboard."""
+from __future__ import annotations
+
 import csv
 import hashlib
 import hmac
@@ -21,6 +23,7 @@ sys.path.insert(0, str(BASE_DIR))
 
 from db import get_db, get_filter_options, init_db, insert_threads, query_threads, seed_db
 from metrics import compute_metrics
+from chat import run_chat, _check_rate
 
 app = FastAPI(title="PT Conversation Dashboard")
 
@@ -60,7 +63,7 @@ __ERR__
 </form></body></html>"""
 
 
-def _is_authed(auth_token: str | None) -> bool:
+def _is_authed(auth_token: Optional[str]) -> bool:
     if not auth_token:
         return False
     return hmac.compare_digest(auth_token, _TOKEN)
@@ -93,7 +96,7 @@ def health():
 
 
 @app.get("/api/filters")
-def filters(auth_token: str | None = Cookie(None)):
+def filters(auth_token: Optional[str] = Cookie(None)):
     if not _is_authed(auth_token):
         raise HTTPException(401, "Unauthorized")
     db = get_db()
@@ -111,7 +114,7 @@ def threads(
     workspace: Optional[str] = Query(None),  # comma-separated
     date_from: Optional[str] = Query(None),
     date_to: Optional[str] = Query(None),
-    auth_token: str | None = Cookie(None),
+    auth_token: Optional[str] = Cookie(None),
 ):
     if not _is_authed(auth_token):
         raise HTTPException(401, "Unauthorized")
@@ -143,7 +146,7 @@ async def import_csv(
     workspace: str = Form(...),
     brand: str = Form(...),
     country: str = Form(...),
-    auth_token: str | None = Cookie(None),
+    auth_token: Optional[str] = Cookie(None),
 ):
     if not _is_authed(auth_token):
         raise HTTPException(401, "Unauthorized")
@@ -286,6 +289,27 @@ async def import_csv(
         shutil.rmtree(tmp_dir, ignore_errors=True)
 
 
+@app.post("/api/chat")
+async def chat_endpoint(request: Request, auth_token: Optional[str] = Cookie(None)):
+    if not _is_authed(auth_token):
+        raise HTTPException(401, "Unauthorized")
+    ip = request.client.host if request.client else "unknown"
+    if not _check_rate(ip):
+        raise HTTPException(429, "Rate limit exceeded. Try again in a minute.")
+    body = await request.json()
+    message = (body.get("message") or "").strip()
+    session_id = body.get("session_id") or "default"
+    if not message or len(message) > 2000:
+        raise HTTPException(400, "Message required (max 2000 chars)")
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        return JSONResponse({"reply": "AI chat is not configured — ANTHROPIC_API_KEY is missing.", "error": None})
+    try:
+        reply = run_chat(session_id, message)
+        return {"reply": reply, "error": None}
+    except Exception as e:
+        return JSONResponse({"reply": None, "error": str(e)}, status_code=500)
+
+
 # Serve frontend static files
 FRONTEND_DIR = BASE_DIR / "frontend" / "dist"
 if FRONTEND_DIR.exists():
@@ -296,7 +320,7 @@ if FRONTEND_DIR.exists():
     )
 
     @app.get("/{full_path:path}")
-    async def serve_frontend(full_path: str, auth_token: str | None = Cookie(None)):
+    async def serve_frontend(full_path: str, auth_token: Optional[str] = Cookie(None)):
         # Allow login page without auth
         if full_path == "login":
             return LOGIN_HTML.replace("__ERR__", "")

@@ -4,7 +4,7 @@ import { useFilters } from './hooks/useFilters';
 import type { FiltersResponse, ThreadsData } from './types';
 import { FilterBar } from './components/FilterBar';
 import { HeadlineTiles } from './components/HeadlineTiles';
-import { FunnelChart } from './components/FunnelChart';
+import { ChatPanel } from './components/ChatPanel';
 import { DropoffMap } from './components/DropoffMap';
 import { PaymentContinuation } from './components/PaymentContinuation';
 import { ObjectionsChart } from './components/ObjectionsChart';
@@ -156,12 +156,9 @@ export function App() {
 
         {/* Two-column grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Funnel — full width */}
+          {/* Ask the Data — full width */}
           <div id="panel-funnel" className="lg:col-span-2 scroll-mt-20">
-            <FunnelChart
-              data={loading ? null : threadsData?.funnel ?? null}
-              engagedN={loading ? null : engagedN}
-            />
+            <ChatPanel />
           </div>
 
           {/* Drop-off Map */}
