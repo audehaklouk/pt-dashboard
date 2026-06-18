@@ -339,9 +339,17 @@ def _compute_metric(metric: str, rows: list[dict], flag: str | None) -> dict:
 MAX_TOOL_ITERATIONS = 3  # keep low for speed on free tier
 
 
-def run_chat(session_id: str, user_message: str) -> str:
+AVAILABLE_MODELS = {
+    "haiku": "claude-haiku-4-5-20251001",
+    "sonnet": "claude-sonnet-4-6",
+}
+
+
+def run_chat(session_id: str, user_message: str, model_key: str | None = None) -> str:
     """Run the agentic loop and return the final assistant text."""
     client = anthropic.Anthropic(timeout=25.0)  # hard timeout per API call
+
+    model = AVAILABLE_MODELS.get(model_key or "", CHAT_MODEL)
 
     history = _get_history(session_id)
     history.append({"role": "user", "content": user_message})
@@ -352,7 +360,7 @@ def run_chat(session_id: str, user_message: str) -> str:
 
     for _ in range(MAX_TOOL_ITERATIONS):
         resp = client.messages.create(
-            model=CHAT_MODEL,
+            model=model,
             max_tokens=1024,
             system=system,
             tools=[QUERY_DATA_TOOL],

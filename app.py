@@ -316,12 +316,13 @@ async def chat_endpoint(request: Request, auth_token: Optional[str] = Cookie(Non
     body = await request.json()
     message = (body.get("message") or "").strip()
     session_id = body.get("session_id") or "default"
+    model_key = body.get("model") or None
     if not message or len(message) > 2000:
         raise HTTPException(400, "Message required (max 2000 chars)")
     if not os.environ.get("ANTHROPIC_API_KEY"):
         return JSONResponse({"reply": "AI chat is not configured — ANTHROPIC_API_KEY is missing.", "error": None})
     try:
-        reply = run_chat(session_id, message)
+        reply = run_chat(session_id, message, model_key=model_key)
         return {"reply": reply, "error": None}
     except Exception as e:
         return JSONResponse({"reply": None, "error": str(e)}, status_code=500)
