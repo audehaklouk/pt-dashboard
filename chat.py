@@ -24,9 +24,9 @@ _SYSTEM_PROMPT: str | None = None
 
 def _get_system_prompt() -> str:
     global _SYSTEM_PROMPT
-    if _SYSTEM_PROMPT is None:
-        path = BASE_DIR / "CHATBOT_CONTEXT.md"
-        _SYSTEM_PROMPT = path.read_text(encoding="utf-8")
+    # Always read fresh in case file was updated
+    path = BASE_DIR / "CHATBOT_CONTEXT.md"
+    _SYSTEM_PROMPT = path.read_text(encoding="utf-8")
     return _SYSTEM_PROMPT
 
 
@@ -84,7 +84,7 @@ QUERY_DATA_TOOL = {
                 "enum": [
                     "thread_count", "inbound_rate", "two_way_rate",
                     "reached_price_rate", "payment_link_rate", "booked_rate",
-                    "topic_prevalence", "conversion_lift",
+                    "dark_rate", "topic_prevalence", "conversion_lift",
                     "median_first_response_min", "p90_first_response_min",
                     "no_reply_rate",
                 ],
@@ -140,15 +140,19 @@ def _execute_query_data(params: dict) -> dict[str, Any]:
     VALID_METRICS = {
         "thread_count", "inbound_rate", "two_way_rate",
         "reached_price_rate", "payment_link_rate", "booked_rate",
-        "topic_prevalence", "conversion_lift",
+        "dark_rate", "topic_prevalence", "conversion_lift",
         "median_first_response_min", "p90_first_response_min",
         "no_reply_rate",
     }
     if metric not in VALID_METRICS:
         return {"error": f"Unknown metric '{metric}'. Valid: {sorted(VALID_METRICS)}"}
 
-    if metric in ("topic_prevalence", "conversion_lift") and not flag:
+    if metric in ("topic_prevalence", "conversion_lift", "dark_rate") and not flag:
         return {"error": f"metric '{metric}' requires a 'flag' parameter (column name)."}
+
+    DARK_FLAGS = {"paylink_dark", "pricequote_dark", "agentsched_dark", "askparent_dark"}
+    if metric == "dark_rate" and flag not in DARK_FLAGS:
+        return {"error": f"dark_rate requires flag to be one of {sorted(DARK_FLAGS)}. Got '{flag}'."}
 
     if flag and flag not in FLAG_COLUMNS:
         return {"error": f"Unknown flag column '{flag}'. Valid: {sorted(FLAG_COLUMNS)}"}
@@ -258,6 +262,31 @@ def _compute_metric(metric: str, rows: list[dict], flag: str | None) -> dict:
         val = round(num / eng_n * 100, 1) if eng_n else 0
         return {"value": val, "numerator": num, "denominator": eng_n,
                 "note": "booked (proxy) / engaged"}
+
+    if metric == "dark_rate":
+        # Map dark flag to the event flag that must be 1
+        event_map = {
+            "paylink_dark": "paylink_sent",
+            "pricequote_dark": "pricequote_sent",
+            "agentsched_dark": "agentsched_sent",
+            "askparent_dark": "askparent",
+        }
+        event_col = event_map[flag]
+        # Denominator: rows where the event happened (flag is not NULL)
+        event_rows = [r for r in rows if r.get(event_col) == 1]
+        dark_rows = [r for r in event_rows if r.get(flag) == 1]
+        continued_rows = [r for r in event_rows if r.get(flag) == 0]
+        n_event = len(event_rows)
+        n_dark = len(dark_rows)
+        n_continued = len(continued_rows)
+        dark_pct = round(n_dark / n_event * 100, 1) if n_event else 0
+        cont_pct = round(n_continued / n_event * 100, 1) if n_event else 0
+        return {
+            "dark_pct": dark_pct, "continued_pct": cont_pct,
+            "dark": n_dark, "continued": n_continued, "event_total": n_event,
+            "flag": flag, "event": event_col,
+            "note": f"{n_dark} went dark out of {n_event} who got {event_col}",
+        }
 
     if metric == "topic_prevalence":
         num = sum(1 for r in engaged if r.get(flag) == 1)
