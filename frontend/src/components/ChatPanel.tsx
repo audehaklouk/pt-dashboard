@@ -53,16 +53,23 @@ export const ChatPanel: React.FC = () => {
     setMessages(prev => [...prev, { role: 'user', content: msg }]);
     setLoading(true);
     try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 90000);
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: msg, session_id: sessionId() }),
+        signal: controller.signal,
       });
+      clearTimeout(timer);
       const data = await res.json();
       const reply = data.reply || data.error || 'No response.';
       setMessages(prev => [...prev, { role: 'assistant', content: reply }]);
-    } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Failed to reach the server.' }]);
+    } catch (err) {
+      const message = err instanceof DOMException && err.name === 'AbortError'
+        ? 'Request timed out — try a simpler question.'
+        : 'Failed to reach the server. Try refreshing the page.';
+      setMessages(prev => [...prev, { role: 'assistant', content: message }]);
     } finally {
       setLoading(false);
       inputRef.current?.focus();

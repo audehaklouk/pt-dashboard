@@ -307,12 +307,12 @@ def _compute_metric(metric: str, rows: list[dict], flag: str | None) -> dict:
 
 
 # ── Agentic chat loop ──
-MAX_TOOL_ITERATIONS = 6
+MAX_TOOL_ITERATIONS = 3  # keep low for speed on free tier
 
 
 def run_chat(session_id: str, user_message: str) -> str:
     """Run the agentic loop and return the final assistant text."""
-    client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
+    client = anthropic.Anthropic(timeout=25.0)  # hard timeout per API call
 
     history = _get_history(session_id)
     history.append({"role": "user", "content": user_message})
@@ -324,7 +324,7 @@ def run_chat(session_id: str, user_message: str) -> str:
     for _ in range(MAX_TOOL_ITERATIONS):
         resp = client.messages.create(
             model=CHAT_MODEL,
-            max_tokens=2048,
+            max_tokens=1024,
             system=system,
             tools=[QUERY_DATA_TOOL],
             messages=messages,
@@ -342,7 +342,6 @@ def run_chat(session_id: str, user_message: str) -> str:
             return final_text
 
         # Process tool calls
-        # Add assistant message with tool_use blocks
         messages.append({"role": "assistant", "content": resp.content})
 
         tool_results = []
