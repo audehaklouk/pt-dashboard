@@ -167,6 +167,9 @@ def compute_metrics(rows: list[dict]) -> dict:
     # --- Demand Drivers ---
     demand_drivers = _compute_demand_drivers(engaged, booked, engaged_n)
 
+    # --- Hour × Day Heatmap ---
+    hour_day_heatmap = _compute_hour_day_heatmap(rows, engaged)
+
     # --- Auto Insight Callouts ---
     auto_insights = _compute_auto_insights(
         rows, engaged, booked, inbound, all_frt, engaged_n, inbound_n, total
@@ -246,6 +249,7 @@ def compute_metrics(rows: list[dict]) -> dict:
         "topic_insights": topic_insights,
         "demand_drivers": demand_drivers,
         "auto_insights": auto_insights,
+        "hour_day_heatmap": hour_day_heatmap,
     }
 
 
@@ -575,6 +579,85 @@ def _compute_demand_drivers(engaged, booked, engaged_n):
         "parent_share": parent_share,
         "parent_bk_pct": parent_bk_pct,
         "parent_n": parent_n,
+    }
+
+
+def _compute_hour_day_heatmap(rows, engaged):
+    """Conversation volume, booking rate, and median response by hour (0-23) × day-of-week (0=Mon..6=Sun)."""
+    DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+    # Build lookup of engaged + booked contacts for fast membership test
+    engaged_set = set()
+    booked_set = set()
+    for r in engaged:
+        key = (r.get("contact"), r.get("thread_date"))
+        engaged_set.add(key)
+        if r.get("booked") == 1:
+            booked_set.add(key)
+
+    # Accumulate per cell
+    cells: dict[tuple[int, int], dict] = {}
+    for day in range(7):
+        for hour in range(24):
+            cells[(day, hour)] = {"volume": 0, "engaged": 0, "booked": 0, "frt_vals": []}
+
+    for r in rows:
+        first_ts = r.get("first")
+        if not first_ts:
+            continue
+        try:
+            dt = datetime.fromisoformat(str(first_ts).replace("Z", "+00:00"))
+            day = dt.weekday()  # 0=Mon
+            hour = dt.hour
+        except (ValueError, TypeError):
+            continue
+
+        cell = cells[(day, hour)]
+        cell["volume"] += 1
+
+        key = (r.get("contact"), r.get("thread_date"))
+        if key in engaged_set:
+            cell["engaged"] += 1
+        if key in booked_set:
+            cell["booked"] += 1
+
+        frt = r.get("first_resp_sec")
+        if frt is not None and frt != "":
+            cell["frt_vals"].append(float(frt) / 60.0)
+
+    # Flatten to list
+    result = []
+    max_volume = 0
+    for day in range(7):
+        for hour in range(24):
+            c = cells[(day, hour)]
+            vol = c["volume"]
+            if vol > max_volume:
+                max_volume = vol
+            eng = c["engaged"]
+            bk = c["booked"]
+            frt = c["frt_vals"]
+            result.append({
+                "day": day,
+                "day_name": DAY_NAMES[day],
+                "hour": hour,
+                "volume": vol,
+                "engaged": eng,
+                "booked": bk,
+                "booked_pct": round(bk / eng * 100, 1) if eng > 0 else 0,
+                "median_resp_min": round(statistics.median(frt), 1) if frt else None,
+                "is_after_hours": hour >= 22 or hour < 8,
+            })
+
+    # Find peak and dead cells
+    peak = max(result, key=lambda x: x["volume"]) if result else None
+    dead = [c for c in result if c["volume"] == 0]
+
+    return {
+        "cells": result,
+        "max_volume": max_volume,
+        "peak": {"day_name": peak["day_name"], "hour": peak["hour"], "volume": peak["volume"]} if peak else None,
+        "dead_cells": len(dead),
     }
 
 

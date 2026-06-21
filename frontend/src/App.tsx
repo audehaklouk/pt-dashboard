@@ -21,6 +21,7 @@ import { BuyReadiness } from './components/BuyReadiness';
 import { TopicInsights } from './components/TopicInsights';
 import { DemandDrivers } from './components/DemandDrivers';
 import { KeyInsights } from './components/KeyInsights';
+import { HourDayHeatmap } from './components/HourDayHeatmap';
 
 function formatDateRange(min: string, max: string): string {
   const fmt = (d: string) => {
@@ -233,6 +234,14 @@ export function App() {
             <SpeedConversion
               data={loading ? null : threadsData?.speed_conversion ?? null}
             />
+
+            {/* Hour × Day Heatmap — full width */}
+            <div className="lg:col-span-2">
+              <HourDayHeatmap
+                data={loading ? null : threadsData?.hour_day_heatmap ?? null}
+                engagedN={loading ? null : engagedN}
+              />
+            </div>
 
             {/* Demand Drivers — full width */}
             <div id="panel-demand-drivers" className="lg:col-span-2 scroll-mt-20">

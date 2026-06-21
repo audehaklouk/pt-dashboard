@@ -185,6 +185,26 @@ export interface DemandDriversData {
   parent_n: number;
 }
 
+// Hour × Day Heatmap
+export interface HeatmapCell {
+  day: number;
+  day_name: string;
+  hour: number;
+  volume: number;
+  engaged: number;
+  booked: number;
+  booked_pct: number;
+  median_resp_min: number | null;
+  is_after_hours: boolean;
+}
+
+export interface HourDayHeatmapData {
+  cells: HeatmapCell[];
+  max_volume: number;
+  peak: { day_name: string; hour: number; volume: number } | null;
+  dead_cells: number;
+}
+
 export interface ThreadsData {
   engaged_n: number;
   headlines: Headlines;
@@ -205,6 +225,7 @@ export interface ThreadsData {
   topic_insights: TopicInsightsData;
   demand_drivers: DemandDriversData;
   auto_insights: InsightSection[];
+  hour_day_heatmap: HourDayHeatmapData;
 }
 
 export interface InsightItem {
