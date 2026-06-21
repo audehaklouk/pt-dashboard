@@ -25,6 +25,30 @@ from db import get_db, get_filter_options, init_db, insert_threads, query_thread
 from metrics import compute_metrics
 from chat import run_chat, _check_rate
 
+# --- In-memory metrics cache ---
+import hashlib as _hashlib
+import json as _json
+import time as _time
+
+_metrics_cache: dict[str, tuple[float, dict]] = {}  # key -> (timestamp, result)
+_CACHE_TTL = 300  # 5 minutes
+
+def _cache_key(brand, country, workspace, date_from, date_to) -> str:
+    raw = _json.dumps([brand, country, workspace, date_from, date_to], sort_keys=True)
+    return _hashlib.md5(raw.encode()).hexdigest()
+
+def _get_cached(key: str) -> dict | None:
+    entry = _metrics_cache.get(key)
+    if entry and (_time.time() - entry[0]) < _CACHE_TTL:
+        return entry[1]
+    return None
+
+def _set_cached(key: str, data: dict) -> None:
+    _metrics_cache[key] = (_time.time(), data)
+
+def _invalidate_cache() -> None:
+    _metrics_cache.clear()
+
 app = FastAPI(title="PT Conversation Dashboard")
 
 # --- Simple password gate ---
@@ -104,6 +128,15 @@ async def _keep_alive():
 def startup():
     init_db()
     seed_db()
+    # Pre-warm cache for the default (unfiltered) view
+    try:
+        db = get_db()
+        rows = query_threads(db)
+        data = compute_metrics(rows)
+        _set_cached(_cache_key(None, None, None, None, None), data)
+        db.close()
+    except Exception:
+        pass
     asyncio.get_event_loop().create_task(_keep_alive())
 
 
@@ -135,6 +168,13 @@ def threads(
 ):
     if not _is_authed(auth_token):
         raise HTTPException(401, "Unauthorized")
+
+    # Check cache first
+    ck = _cache_key(brand, country, workspace, date_from, date_to)
+    cached = _get_cached(ck)
+    if cached is not None:
+        return {"data": cached, "error": None}
+
     db = get_db()
     try:
         countries = (
@@ -152,6 +192,7 @@ def threads(
             date_to=date_to,
         )
         data = compute_metrics(rows)
+        _set_cached(ck, data)
         return {"data": data, "error": None}
     finally:
         db.close()
@@ -290,6 +331,7 @@ async def import_csv(
         db = get_db()
         try:
             count = insert_threads(db, thread_rows)
+            _invalidate_cache()
             dates = [r["thread_date"] for r in thread_rows if r["thread_date"]]
             date_span = [min(dates), max(dates)] if dates else []
             return {

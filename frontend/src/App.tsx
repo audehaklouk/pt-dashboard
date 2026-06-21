@@ -75,7 +75,7 @@ export function App() {
           setThreadsData(null);
         })
         .finally(() => setLoading(false));
-    }, 300);
+    }, 150);
 
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);

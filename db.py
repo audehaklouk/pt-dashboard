@@ -100,6 +100,12 @@ def init_db() -> None:
     conn = sqlite3.connect(DB_PATH)
     try:
         conn.execute(ddl)
+        # Indexes for filtered queries
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_threads_brand ON threads(brand)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_threads_country ON threads(country)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_threads_workspace ON threads(workspace)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_threads_date ON threads(thread_date)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_threads_brand_date ON threads(brand, thread_date)")
         conn.commit()
     finally:
         conn.close()
