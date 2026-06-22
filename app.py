@@ -154,11 +154,12 @@ async def google_login(request: Request):
     """Redirect to Google consent screen."""
     if not GOOGLE_CLIENT_ID:
         raise HTTPException(500, "Google OAuth is not configured")
-    redirect_uri = request.url_for("google_callback")
-    # Force HTTPS in production (Render terminates TLS at the proxy)
-    redirect_uri = str(redirect_uri)
-    if redirect_uri.startswith("http://") and os.environ.get("RENDER"):
-        redirect_uri = redirect_uri.replace("http://", "https://", 1)
+    # Hardcode redirect URI from APP_BASE_URL env var to avoid proxy/scheme issues on Render
+    base = os.environ.get("APP_BASE_URL", "").rstrip("/")
+    if base:
+        redirect_uri = f"{base}/auth/callback"
+    else:
+        redirect_uri = str(request.url_for("google_callback"))
     return await oauth.google.authorize_redirect(request, redirect_uri, prompt="select_account")
 
 
